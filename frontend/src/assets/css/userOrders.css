@@ -1,0 +1,123 @@
+
+.my-order-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.user-name {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.no-orders {
+    font-size: 1rem;
+    color: #777;
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.order-id {
+    font-weight: bold;
+}
+
+.order-items {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.order-item {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.order-price {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.delivery-date {
+    font-size: 1rem;
+    color: #28a745;
+    margin-top: 10px;
+}
+
+/* Status Bar */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-top: 15px;
+    padding: 10px 0;
+}
+
+.status-step {
+    text-align: center;
+    width: 25%;
+    position: relative;
+}
+
+.status-dot {
+    width: 15px;
+    height: 15px;
+    background: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    z-index: 2;
+}
+
+.status-label {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Progress Line */
+.status-step::after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #ddd;
+    z-index: 1;
+}
+
+.status-step:last-child::after {
+    content: none;
+}
+
+/* Active Status */
+.status-step.active .status-dot {
+    background: #007bff;
+}
+
+.status-step.active::after {
+    background: #007bff;
+}

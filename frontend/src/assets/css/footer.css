@@ -1,0 +1,28 @@
+li a i {
+    cursor: pointer;
+}
+li a i:hover{
+    color: #ffffff;
+}
+
+a {
+    text-decoration: none;
+}
+
+.ft-link{
+    text-decoration: none;
+}
+
+.ft-link:hover{
+    color:white !important; 
+}
+
+.footer-title {
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.bg-footer {
+    background-color: rgb(160, 111, 48);
+}

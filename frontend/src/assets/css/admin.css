@@ -1,0 +1,98 @@
+#bg-nav {
+    background-color:rgb(255, 255, 255) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  
+  .nav-brand {
+    font-family: 'Open Sans', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    line-height: 24.51px !important;
+    color: rgb(160, 111, 48) !important;
+  }
+  
+  .nav-brand:hover {
+    color: rgb(160, 111, 48) !important;
+  }
+  
+  
+  .nav-names {
+    font-family: 'Open Sans', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    line-height: 24.51px !important;
+  }
+  
+  .nav-names {
+    color: grey !important;
+  }
+  
+  .nav-names:hover {
+    color: rgb(160, 111, 48)  !important;
+  }
+  
+  
+  
+  .icon-link:hover {
+    color: rgb(160, 111, 48)  !important;
+    cursor: pointer !important;
+  }
+  
+  .nav-user-name{
+    color: rgb(0, 0, 0) !important;
+    font-family: 'Open Sans', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    line-height: 24.51px !important;
+   
+  }
+  .nav-user-name:hover{
+    color:rgb(160, 111, 48) ;
+  }
+
+  /* admin dash board */
+  .admin-title{
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+  }
+
+  .dash-btn{
+    background-color:rgb(160, 111, 48) !important ;
+    border: none !important;
+    font-weight: 600 !important;
+    color: rgb(255, 255, 255) !important;
+  }
+
+  /* Admincustomers */
+  .admin-customers-title{
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+
+  }
+
+
+  /* Admineditproducts */
+  .edtiproducts-title{
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+
+  }
+
+  .SaveChanges-btn{
+    background-color:rgb(160, 111, 48) !important ;
+    border: none !important;
+    font-weight: 600 !important;
+    color: rgb(255, 255, 255) !important;
+
+  }
+

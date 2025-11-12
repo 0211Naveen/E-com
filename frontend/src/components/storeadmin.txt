@@ -1,0 +1,54 @@
+
+
+import React, { useState } from 'react';
+import Storeadmin from './storeadmin';
+
+const AdminPrivileges = () => {
+    const [visibleSections, setVisibleSections] = useState({
+        products: false,
+        users: false,
+        orders: false,
+    });
+
+    const toggleSection = (section) => {
+        setVisibleSections(prevState => ({
+            ...prevState,
+            [section]: !prevState[section],
+        }));
+    };
+
+    return (
+        <div className="privileges-container">
+            <h1>Admin Privileges</h1>
+
+            {/* Products Section */}
+            <div className="privilege-card">
+                <h2>Products Page</h2>
+                <button onClick={() => toggleSection('products')} className="show-btn">
+                    {visibleSections.products ? 'Hide' : 'Show'}
+                </button>
+            </div>
+
+            {/* Users Section */}
+            <div className="privilege-card">
+                <h2>Users Page</h2>
+                <button onClick={() => toggleSection('users')} className="show-btn">
+                    {visibleSections.users ? 'Hide' : 'Show'}
+                </button>
+            </div>
+
+            {/* Orders Section */}
+            <div className="privilege-card">
+                <h2>Orders Page</h2>
+                <button onClick={() => toggleSection('orders')} className="show-btn">
+                    {visibleSections.orders ? 'Hide' : 'Show'}
+                </button>
+            </div>
+
+            {/* Pass Visibility State to Storeadmin */}
+            <Storeadmin visibleSections={visibleSections} />
+        </div>
+    );
+};
+
+export default AdminPrivileges;

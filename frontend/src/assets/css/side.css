@@ -1,0 +1,70 @@
+General container styling
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Styling for the sidenav */
+  .sidenav {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .sidenav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .sidenav a:hover {
+    background-color: #555;
+  }
+  
+  /* Styling for the content */
+  .content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+
+  .about-container {
+    display: flex;
+    height: 100vh; /* Make it take full viewport height */
+  }
+  
+  .side-nav {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .side-nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .side-nav a:hover {
+    background-color: #555;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  

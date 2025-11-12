@@ -1,0 +1,198 @@
+
+#product-title {
+    margin-top: 30px !important;
+    font-weight: 900 !important;
+    font-size: xx-large !important;
+    color: rgb(160, 111, 48)!important;
+}
+
+
+
+
+
+
+
+/* cart componenet */
+.cart-title {
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+}
+
+.cart-form {
+    max-width: 800px;
+    margin: 0 auto;
+    /* Center the form horizontally */
+
+}
+
+.cart-form-titile {
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+
+}
+
+/* customer-titlt */
+.customer-form-title {
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+
+}
+
+/* order component */
+
+
+
+
+.product-heart:hover {
+    color: #ff3a3f !important;
+    /* Slightly darker shade on hover */
+}
+
+
+/* wishlist page */
+
+.wishlist-title {
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+    padding: 10px;
+}
+
+
+
+/* user dash */
+
+.my-order-title {
+    margin-top: 30px;
+    font-weight: 900;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+    padding: 10px;
+
+}
+
+
+/* review page */
+
+.review-del-btn:hover {
+
+    background-color: #dc3545;
+    transform: scale(1.1);
+}
+
+.Customer-Reviews-title{
+  
+    font-weight: 800;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+   
+}
+
+.Review-title{
+    font-weight: 800;
+    font-size: xx-large;
+    color: rgb(160, 111, 48);
+}
+
+
+
+
+
+/* Search Bar */
+.search-bar {
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-bar:focus {
+    border-color: #8B4513;
+    box-shadow: 0 0 8px rgba(139, 69, 19, 0.5);
+}
+
+/* Product Card */
+.product-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: scale(1.03);
+}
+
+/* Set all images to the same size */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px; /* Adjust height as needed */
+    overflow: hidden;
+    background: #f8f8f8;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Styling for Product Name */
+.product-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #4a4a4a;
+    /* text-align: center; */
+}
+
+/* Styling for Product Price */
+.product-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #8B4513;
+    /* text-align: center; */
+}
+
+/* Brown Add to Cart Button */
+.add-to-cart-btn {
+    background-color: #8B4513 !important;
+    color: white !important;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #6F4E37 !important;
+}
+
+/* View Details Button (Updated Color) */
+.view-details-btn {
+    background-color: #0d213c !important; /* Dark blue */
+    color: white !important;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.view-details-btn:hover {
+    background-color: #003580 !important;
+}
+
+
+/* Custom Toast Notification */
+.Toastify__toast--success {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #8B4513 !important; /* Brown color */
+    color: white !important;
+}
