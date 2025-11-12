@@ -275,10 +275,13 @@ const express = require("express");
 const mongoose = require('mongoose');
 const cors = require("cors");
 const path = require("path");
-const productsModel = require("./routes/addproducts");
+
+
+const productRoutes = require("./routes/addproducts");
+
+
 const CustomerModel = require("./routes/register");
 const loginModel = require("./routes/login");
-const Product = require("./models/addproducts");
 const Admincustomers = require('./models/Customer');
 const orderModel = require('./routes/order');
 const userdash = require('./routes/userdash');
@@ -329,8 +332,9 @@ mongoose.connect(process.env.MONGO_URI, {
 // user side routs
 
 
-// display products customers
-app.get('/addproducts', productsModel);
+app.use("/addproducts", productRoutes);
+
+
 
 // Register
 app.post('/register', CustomerModel);
@@ -340,27 +344,8 @@ app.delete('/customers/:id', CustomerModel)
 // Login
 app.post('/login', loginModel);
 
-// Get product by ID
-app.get('/addproducts/:id', async (req, res) => {
-    try {
-        const productId = req.params.id;
 
-        if (!productId || !mongoose.isValidObjectId(productId)) {
-            return res.status(400).json({ message: 'Invalid Product ID' });
-        }
 
-        const product = await Product.findById(productId); // Use Product model here
-
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        res.json(product);
-    } catch (error) {
-        console.error('Error fetching product:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
 
 // admin side 
 
@@ -382,46 +367,10 @@ app.get('/count', async (req, res) => {
     }
 });
 
-// edit produtcs in admin
-app.put('/addproducts/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const updatedProduct = req.body;
-
-        const result = await Product.findByIdAndUpdate(id, updatedProduct, { new: true });
-        if (!result) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        res.json({ message: 'Product updated successfully', product: result });
-    } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-
-// delete produtcs in admin
-app.delete('/addproducts/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const result = await Product.findByIdAndDelete(id); // Find and delete the product by ID
-        if (!result) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        res.json({ message: 'Product deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting product:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
 
 
 
-// add products
-app.post("/addproducts", productsModel);
+
 
 // post orders
 app.post('/orders', orderModel);
