@@ -23,8 +23,17 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 
+// ✅ CORS FIX — Allow frontend requests from your Vercel domain
+app.use(cors({
+  origin: [
+    "https://e-com-olive-rho.vercel.app", // your frontend live URL
+    "http://localhost:3000" // optional: for local testing
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
