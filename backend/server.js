@@ -274,7 +274,9 @@ app.get('/getPrivileges', async (req, res) => {
 
 // Server port
 
-const PORT = process.env.PORT || 3001; // fallback if .env missing
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on port ${PORT}`);
-});
+// const PORT = process.env.PORT || 3001; // fallback if .env missing
+// app.listen(PORT, () => {
+//     console.log(`🚀 Server is running on port ${PORT}`);
+// });
+
+module.exports = app;
