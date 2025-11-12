@@ -31,9 +31,5 @@ router.post('/addproducts', upload.single('image'), addproducts);
 router.get('/addproducts', getProducts);
 
 
-//  // Add this route for fetching by ID
-//  router.get('/addproducts/:id', getProductById); 
-
-
 
 module.exports = router;
