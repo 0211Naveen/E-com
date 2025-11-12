@@ -31,8 +31,9 @@
 // };
 
 
-const bcrypt = require('bcryptjs');
 const loginModel = require('../models/Customer');
+
+const bcrypt = require('bcryptjs');
 
 // Login a customer
 exports.loginCustomer = async (req, res) => {

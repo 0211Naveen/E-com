@@ -11,6 +11,7 @@
 const CustomerModel = require('../models/Customer');
 const bcrypt = require('bcryptjs');
 
+
 // Register a new customer
 exports.registerCustomer = async (req, res) => {
     try {

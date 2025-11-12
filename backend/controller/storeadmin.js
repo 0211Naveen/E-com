@@ -1,6 +1,7 @@
 // controllers/storeController.js
 const StoreModel = require('../models/storeadmin');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+
 
 // Register new store
 exports.registerStore = async (req, res) => {
