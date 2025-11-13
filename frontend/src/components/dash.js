@@ -21,6 +21,7 @@ const AdminDashboard = () => {
             });
     }, []);
 
+
     useEffect(() => {
         const fetchOrderCount = async () => {
             try {
@@ -119,7 +120,7 @@ const AdminDashboard = () => {
                         </Link>
                         <Link to="/admincustomers" className="dashboard-card" data-aos="zoom-in">
                             <h2>Users</h2>
-                            <p className="count">{customerCount}</p>
+                            {/* <p className="count">{customerCount}</p> */}
                             <i className="fas fa-users icon"></i>
                         </Link>
                         <Link to="/adminpending" className="dashboard-card" data-aos="zoom-in">
@@ -128,7 +129,7 @@ const AdminDashboard = () => {
                         </Link>
                         <Link to="/adminorders" className="dashboard-card" data-aos="zoom-in">
                             <h2>Orders</h2>
-                            <p className="count">{orderCount}</p>
+                            {/* <p className="count">{orderCount}</p> */}
                             <i className="fa-solid fa-pen-to-square icon"></i>
                         </Link>
                         <Link to="/addproducts" className="dashboard-card" data-aos="zoom-in">
