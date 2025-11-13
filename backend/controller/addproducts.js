@@ -22,15 +22,21 @@ const addproducts = async (req, res) => {
 
 
 
+// const getProducts = (req, res) => {
+//     productsModel.find()
+//         .then(products => {
+//             const updatedProducts = products.map(product => ({
+//                 ...product._doc,
+//                 image: product.image, // If image stores just the filename like 'image.jpg'
+//             }));
+//             res.json(updatedProducts);
+//         })
+//         .catch(err => res.status(400).json({ error: err.message }));
+// };
+
 const getProducts = (req, res) => {
     productsModel.find()
-        .then(products => {
-            const updatedProducts = products.map(product => ({
-                ...product._doc,
-                image: product.image, // If image stores just the filename like 'image.jpg'
-            }));
-            res.json(updatedProducts);
-        })
+        .then(products => res.json(products))
         .catch(err => res.status(400).json({ error: err.message }));
 };
 
