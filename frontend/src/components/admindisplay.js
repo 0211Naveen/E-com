@@ -203,7 +203,7 @@ const Admindisplay = () => {
     <>
       <div className="admin-container">
         {/* Sidebar */}
-        <div className="sidebar" style={{ padding: '10px', height: '100vh' }}>
+        {/* <div className="sidebar" style={{ padding: '10px', height: '100vh' }}>
           <Link to="/dash">
             <h2 className="sidebar-title" style={{ marginBottom: '20px', fontSize: '1.5rem' }}>
               Dashboard
@@ -219,7 +219,51 @@ const Admindisplay = () => {
             <li><Link to="/adminimages"><i className="fa-regular fa-image me-2"></i>Add Images</Link></li>
             <li><Link to="/group"><i className="fas fa-shield-alt me-2"></i>Privileges</Link></li>
           </ul>
-        </div>
+        </div> */}
+        
+                                    <div className="sidebar" style={{ padding: '10px', height: '100vh' }}>
+                                        <Link to="/dash">
+                                            <h2 className='sidebar-title' style={{ marginBottom: '20px', fontSize: '1.5rem' }}>Dashboard</h2>
+                                        </Link>
+                    
+                                        <ul className="sidebar-menu" style={{ padding: '0', margin: '0' }}>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/displayproduct" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fas fa-box" style={{ marginRight: '8px' }}></i> Products
+                                                </Link>
+                                            </li>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/admincustomers" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fas fa-users" style={{ marginRight: '8px' }}></i> Users
+                                                </Link>
+                                            </li>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/adminpending" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fas fa-truck" style={{ marginRight: '8px' }}></i> Pending Orders
+                                                </Link>
+                                            </li>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/adminorders" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fa-solid fa-pen-to-square" style={{ marginRight: '8px' }}></i> Orders
+                                                </Link>
+                                            </li>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/addproducts" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fa-solid fa-cart-plus" style={{ marginRight: '8px' }}></i> Add Product
+                                                </Link>
+                                            </li>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/adminimages" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fa-regular fa-image" style={{ marginRight: '8px' }}></i> Add Images
+                                                </Link>
+                                            </li>
+                                            <li style={{ margin: '10px 0' }}>
+                                                <Link to="/group" style={{ padding: '8px 10px', display: 'block' }}>
+                                                    <i className="fas fa-shield-alt" style={{ marginRight: '8px' }}></i> Privileges
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    </div>
 
         {/* Main Content */}
         <div className="main-content">
