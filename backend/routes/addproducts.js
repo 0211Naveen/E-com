@@ -44,21 +44,26 @@ const fs = require('fs');
 const Product = require('../models/addproducts');
 const { addproducts, getProducts } = require('../controller/addproducts');
 
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinary'); // ✅ Import config
+
+
+// ✅ Set up Cloudinary storage
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'antique-products', // Folder in Cloudinary dashboard
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+  },
+});
+
 // ✅ Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// ✅ Multer setup for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadsDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // unique file name
-  },
-});
+
 const upload = multer({ storage });
 
 // ✅ POST: Add product with image upload
