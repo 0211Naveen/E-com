@@ -89,88 +89,54 @@ const Adminimages = () => {
     }, []);
 
     return (
-      
+
         <>
             <div className="admin-container">
                 {/* Sidebar */}
-                {/* <div className="sidebar">
-                    <Link to="/dash"  ><h2 className='sidebar-title'>Dashboard</h2></Link>
-                    <ul className="sidebar-menu">
-                        <li>
-                            <Link to="/displayproduct">
-                                <i className="fas fa-box"></i> Products
+
+                <div className="sidebar" style={{ padding: '10px', height: '100vh' }}>
+                    <Link to="/dash">
+                        <h2 className='sidebar-title' style={{ marginBottom: '20px', fontSize: '1.5rem' }}>Dashboard</h2>
+                    </Link>
+
+                    <ul className="sidebar-menu" style={{ padding: '0', margin: '0' }}>
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/displayproduct" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fas fa-box" style={{ marginRight: '8px' }}></i> Products
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/admincustomers">
-                                <i className="fas fa-users"></i> Users
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/admincustomers" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fas fa-users" style={{ marginRight: '8px' }}></i> Users
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/adminpending">
-                                <i className="fas fa-truck"></i> Pending Orders
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/adminpending" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fas fa-truck" style={{ marginRight: '8px' }}></i> Pending Orders
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/adminorders">
-                                <i className="fa-solid fa-pen-to-square"></i> Orders
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/adminorders" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fa-solid fa-pen-to-square" style={{ marginRight: '8px' }}></i> Orders
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/addproducts">
-                                <i className="fa-solid fa-cart-plus"></i> Add Product
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/addproducts" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fa-solid fa-cart-plus" style={{ marginRight: '8px' }}></i> Add Product
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/adminimages" className="active">
-                                <i className="fa-regular fa-image"></i> Add Images
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/adminimages" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fa-regular fa-image" style={{ marginRight: '8px' }}></i> Add Images
+                            </Link>
+                        </li>
+                        <li style={{ margin: '10px 0' }}>
+                            <Link to="/group" style={{ padding: '8px 10px', display: 'block' }}>
+                                <i className="fas fa-shield-alt" style={{ marginRight: '8px' }}></i> Privileges
                             </Link>
                         </li>
                     </ul>
-                </div> */}
-                  <div className="sidebar" style={{ padding: '10px', height: '100vh' }}>
-                                    <Link to="/dash">
-                                        <h2 className='sidebar-title' style={{ marginBottom: '20px', fontSize: '1.5rem' }}>Dashboard</h2>
-                                    </Link>
-                
-                                    <ul className="sidebar-menu" style={{ padding: '0', margin: '0' }}>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/displayproduct" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fas fa-box" style={{ marginRight: '8px' }}></i> Products
-                                            </Link>
-                                        </li>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/admincustomers" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fas fa-users" style={{ marginRight: '8px' }}></i> Users
-                                            </Link>
-                                        </li>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/adminpending" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fas fa-truck" style={{ marginRight: '8px' }}></i> Pending Orders
-                                            </Link>
-                                        </li>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/adminorders" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fa-solid fa-pen-to-square" style={{ marginRight: '8px' }}></i> Orders
-                                            </Link>
-                                        </li>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/addproducts" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fa-solid fa-cart-plus" style={{ marginRight: '8px' }}></i> Add Product
-                                            </Link>
-                                        </li>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/adminimages" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fa-regular fa-image" style={{ marginRight: '8px' }}></i> Add Images
-                                            </Link>
-                                        </li>
-                                        <li style={{ margin: '10px 0' }}>
-                                            <Link to="/group" style={{ padding: '8px 10px', display: 'block' }}>
-                                                <i className="fas fa-shield-alt" style={{ marginRight: '8px' }}></i> Privileges
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </div>
+                </div>
 
                 {/* Main Content */}
                 <div className="main-content">
@@ -211,12 +177,13 @@ const Adminimages = () => {
                                                     <td>{index + 1}</td>
                                                     <td>
                                                         <img
-                                                            src={`http://localhost:3001${banner.path}`}
+                                                            src={banner.path}
                                                             alt={`Banner ${index + 1}`}
                                                             className="banner-thumbnail"
                                                             style={{ width: "100px", height: "auto", borderRadius: "5px" }}
                                                         />
                                                     </td>
+
                                                     <td>
                                                         <button
                                                             className="btn btn-danger"
