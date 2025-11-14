@@ -320,14 +320,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/bannerimages', express.static(path.join(__dirname, 'bannerimages')));
 
 // // MongoDB connection
-// mongoose.connect(process.env.MONGO_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-// .then(() => console.log("✅ MongoDB connected successfully"))
-// .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));

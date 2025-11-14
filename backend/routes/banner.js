@@ -1,74 +1,64 @@
+
 // const express = require('express');
+// const router = express.Router();
 // const multer = require('multer');
 // const path = require('path');
-// const { uploadBannerImage } = require('../controller/banner');
+// const fs = require('fs');
+// const { uploadBannerImage, getAllBanners, deleteBannerById} = require('../controller/banner');
 
-// const router = express.Router();
+// // Ensure the uploads directory exists
+// const uploadsDir = path.join(__dirname, '../bannerimages');
+// if (!fs.existsSync(uploadsDir)) {
+//     fs.mkdirSync(uploadsDir, { recursive: true });
+// }
 
-// // Multer configuration for file uploads
+// // Set up storage for multer
 // const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, './bannerimages/'); // Save files in the `bannerimages/` directory
+//     destination: function (req, file, cb) {
+//         cb(null, uploadsDir);
 //     },
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + '-' + file.originalname); // Unique filenames
-//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + path.extname(file.originalname)); //timestamp to the filename
+//     }
 // });
 
-// const upload = multer({
-//     storage,
-//     limits: { fileSize: 2 * 1024 * 1024 }, // 2MB size limit
-//     fileFilter: (req, file, cb) => {
-//         if (!file.mimetype.startsWith('image/')) {
-//             return cb(new Error('Only image files are allowed!'), false);
-//         }
-//         cb(null, true);
-//     },
-// });
-
-// // Upload banner image
+// // Initialize multer
+// const upload = multer({ storage: storage });
 // router.post('/bannerimg', upload.single('image'), uploadBannerImage);
 
-// // Get all banner images
-// // router.get('/bannerimg', getAllBanners);
+
+// //  // get banner by ID
+//  router.get('/bannerimg', getAllBanners); 
+
+// // DELETE: Delete banner by ID
+// router.delete('/bannerimg/:id', deleteBannerById);
 
 // module.exports = router;
-
 
 
 
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const { uploadBannerImage, getAllBanners, deleteBannerById} = require('../controller/banner');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinary'); // ✅ Cloudinary config
+const { uploadBannerImage, getAllBanners, deleteBannerById } = require('../controller/banner');
 
-// Ensure the uploads directory exists
-const uploadsDir = path.join(__dirname, '../bannerimages');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
-// Set up storage for multer
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadsDir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname)); //timestamp to the filename
-    }
+// ✅ Configure Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'antique-banners', // Folder name in Cloudinary
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+  },
 });
 
-// Initialize multer
-const upload = multer({ storage: storage });
+// ✅ Initialize multer with Cloudinary storage
+const upload = multer({ storage });
+
+// ✅ Routes
 router.post('/bannerimg', upload.single('image'), uploadBannerImage);
-
-
-//  // get banner by ID
- router.get('/bannerimg', getAllBanners); 
-
-// DELETE: Delete banner by ID
+router.get('/bannerimg', getAllBanners);
 router.delete('/bannerimg/:id', deleteBannerById);
 
 module.exports = router;
