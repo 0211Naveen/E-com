@@ -289,6 +289,9 @@ const reviewcont = require('./routes/review');
 const bannerRoutes = require('./routes/banner');
 const adminRoutes = require('./routes/admin');
 const storeRoutes = require('./routes/storeadmin');
+const cartRoutes = require("./routes/cart");
+
+
 dotenv.config();
 
 require("dotenv").config();
@@ -332,6 +335,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/addproducts", productRoutes);
 
+app.use("/cart", cartRoutes);
 
 
 // Register
