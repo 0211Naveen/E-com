@@ -1,251 +1,197 @@
-// import React, { useEffect, useState, useContext } from 'react';
-// import { useParams, Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
-// import { Card, Row, Col } from 'react-bootstrap';
-// import Navbar from './navbar';
-// import Footer from './footer';
-// import { userContext } from '../App';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import '../assets/css/products.css';
 
-// const ProductDetails = ({ addToCart, addToWishlist, cart }) => {
-//   const { id } = useParams(); // Product ID from URL
+
+// import React, { useEffect, useState, useContext } from "react";
+// import { useParams, Link, useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import { Card, Row, Col } from "react-bootstrap";
+// import Navbar from "./navbar";
+// import Footer from "./footer";
+// import { userContext } from "../App";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import "../assets/css/products.css";
+
+// const ProductDetails = () => {
+//   const { id } = useParams();               // product id
 //   const [product, setProduct] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [quantity, setQuantity] = useState(1);
-//   const [reviewText, setReviewText] = useState('');
 //   const [reviews, setReviews] = useState([]);
-//   const { user } = useContext(userContext);
-
+//   const [reviewText, setReviewText] = useState("");
+//   const { user } = useContext(userContext); // <-- user from context
 //   const navigate = useNavigate();
 
-//   // ✅ Fetch product details
+//   // ---------- 1. FETCH PRODUCT ----------
 //   useEffect(() => {
-//     const fetchProduct = async () => {
-//       try {
-//         const response = await axios.get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`);
-//         setProduct(response.data);
-
-//         const existingCartItem = cart.find(item => item._id === response.data._id);
-//         if (existingCartItem) setQuantity(existingCartItem.quantity);
-//       } catch (err) {
-//         console.error('Error fetching product:', err);
-//         setError('Could not load product details.');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchProduct();
-//   }, [id, cart]);
-
-//   // ✅ Fetch product reviews
-//   useEffect(() => {
-//     const fetchReviews = async () => {
-//       try {
-//         const response = await axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
-//         const reviewArray = Array.isArray(response.data)
-//           ? response.data
-//           : response.data.reviews || [];
-//         setReviews(reviewArray);
-//       } catch (err) {
-//         console.error('Error fetching reviews:', err);
-//         setReviews([]);
-//       }
-//     };
-//     fetchReviews();
+//     axios
+//       .get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`)
+//       .then((res) => setProduct(res.data))
+//       .catch((err) => console.error("Product fetch error:", err));
 //   }, [id]);
 
-//   // ✅ Add to Cart
+//   // ---------- 2. FETCH REVIEWS ----------
+//   useEffect(() => {
+//     axios
+//       .get(`${process.env.REACT_APP_API_URL}/review/${id}`)
+//       .then((res) => {
+//         const list = Array.isArray(res.data) ? res.data : res.data.reviews || [];
+//         setReviews(list);
+//       })
+//       .catch(() => setReviews([]));
+//   }, [id]);
+
+//   // ---------- 3. ADD TO CART ----------
 //   const handleAddToCart = () => {
-//     addToCart({ ...product, quantity });
-//     toast.success(`${quantity} x ${product.pname} added to cart!`, {
-//       position: "top-center",
-//       autoClose: 2000,
-//       hideProgressBar: true,
-//       closeOnClick: true,
-//       pauseOnHover: true,
-//       draggable: false
-//     });
-//   };
+//     // ---- a) GET USER ID (context → sessionStorage fallback) ----
+//     const contextUserId = user?.userId || user?._id;          // adjust field name
+//     const sessionUserId = sessionStorage.getItem("userId");
+//     const finalUserId = contextUserId || sessionUserId;
 
-//   // ✅ Add to Wishlist
-//   const handleAddToWishlist = () => {
-//     addToWishlist(product);
-//     toast.info(`${product.pname} added to wishlist!`);
-//   };
+//     console.log("=== ADD TO CART DEBUG ===");
+//     console.log("context user →", user);
+//     console.log("session userId →", sessionUserId);
+//     console.log("finalUserId used →", finalUserId);
+//     console.log("product →", product);
 
-//   // ✅ Submit Review
-//   const handleSubmitReview = async (e) => {
-//     e.preventDefault();
+//     if (!finalUserId) {
+//       toast.error("Please login first!");
+//       navigate("/login");
+//       return;
+//     }
 
-//     if (!reviewText.trim()) return toast.error("Review cannot be empty!");
-//     if (!user) return toast.error("Please log in to submit a review.");
+//     if (!product?._id) {
+//       toast.error("Product not loaded yet");
+//       return;
+//     }
 
-//     try {
-//       await axios.post(`${process.env.REACT_APP_API_URL}/review`, {
-//         productId: id,
-//         review: reviewText,
-//         userName: user.name,
+//     // ---- b) CALL API ----
+//     axios
+//       .post(`${process.env.REACT_APP_API_URL}/cart`, {
+//         userId: finalUserId,
+//         product,                         // whole product object (pname, price, image, _id)
+//       })
+//       .then((res) => {
+//         console.log("Cart API success →", res.data);
+//         toast.success(res.data.message || "Added to cart!");
+//       })
+//       .catch((err) => {
+//         console.error("Cart API error →", err.response?.data || err);
+//         toast.error(err.response?.data?.error || "Failed to add to cart");
 //       });
-
-//       setReviewText('');
-//       toast.success("Review submitted successfully!");
-
-//       const response = await axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
-//       const reviewArray = Array.isArray(response.data)
-//         ? response.data
-//         : response.data.reviews || [];
-//       setReviews(reviewArray);
-//     } catch (err) {
-//       console.error("Error submitting review:", err);
-//       toast.error("Failed to submit review.");
-//     }
 //   };
 
-//   // ✅ Delete Review
-//   const handleDeleteReview = async (reviewId) => {
-//     try {
-//       const response = await axios.delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`);
-//       if (response.status === 200) {
-//         setReviews(reviews.filter((rev) => rev._id !== reviewId));
-//         toast.success('Review deleted successfully!');
-//       }
-//     } catch (err) {
-//       console.error('Error deleting review:', err);
-//       toast.error('Failed to delete review.');
+//   // ---------- 4. SUBMIT REVIEW (unchanged) ----------
+//   const handleSubmitReview = (e) => {
+//     e.preventDefault();
+//     if (!user) {
+//       toast.error("Login required!");
+//       return;
 //     }
+//     axios
+//       .post(`${process.env.REACT_APP_API_URL}/review`, {
+//         productId: id,
+//         userName: user.name,
+//         review: reviewText,
+//       })
+//       .then(() => {
+//         setReviewText("");
+//         toast.success("Review submitted!");
+//         return axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
+//       })
+//       .then((res) => setReviews(res.data))
+//       .catch(() => toast.error("Error submitting review"));
 //   };
 
-//   if (loading) return <p>Loading product details...</p>;
-//   if (error) return <p className="text-danger text-center">{error}</p>;
-//   if (!product) return <p>Product not found.</p>;
+//   // ---------- 5. DELETE REVIEW ----------
+//   const handleDeleteReview = (reviewId) => {
+//     axios
+//       .delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`)
+//       .then(() => {
+//         setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+//         toast.success("Review deleted");
+//       })
+//       .catch(() => toast.error("Error deleting review"));
+//   };
+
+//   if (!product) return <p className="text-center">Loading...</p>;
 
 //   const { pname, price, desc, image } = product;
-
-//   // ✅ Fix for Cloudinary images
-//   const imagePath = image
-//     ? image // full Cloudinary URL directly from DB
-//     : 'https://via.placeholder.com/400x300?text=No+Image';
+//   const imagePath = image || "https://via.placeholder.com/400x300";
 
 //   return (
 //     <>
 //       <Navbar />
-//       <div className="desc-page">
-//         <div className="container py-5">
-//           <Row className="align-items-center justify-content-center">
-//             <Col md={6} className="mb-3">
-//               <Card className="shadow-lg border-0 rounded-3 overflow-hidden">
-//                 <Card.Img
-//                   variant="top"
-//                   src={imagePath}
-//                   alt={pname}
-//                   className="img-fluid"
-//                   onError={(e) => {
-//                     e.target.src = 'https://via.placeholder.com/400x300?text=Image+Error';
-//                   }}
-//                 />
-//               </Card>
-//             </Col>
-//             <Col md={5}>
-//               <Card className="p-4 shadow-lg border-0 rounded-3 bg-light">
-//                 <Card.Body>
-//                   <Card.Title className="fw-bold fs-4">{pname}</Card.Title>
-//                   <Card.Text className="fs-5 text-muted">
-//                     Price: <strong>Rs. {price}</strong>
-//                   </Card.Text>
-//                   <Card.Text className="fs-6 text-secondary">{desc}</Card.Text>
+//       <div className="container py-5">
+//         <Row className="align-items-center">
+//           <Col md={6}>
+//             <Card className="shadow-lg border-0">
+//               <img src={imagePath} className="img-fluid" alt={pname} />
+//             </Card>
+//           </Col>
 
-//                   <div className="d-flex gap-3 mt-3">
-//                     <button
-//                       className="btn btn-dark px-4 py-2 rounded-pill"
-//                       onClick={handleAddToCart}
-//                     >
-//                       Add to Cart
-//                     </button>
+//           <Col md={6}>
+//             <Card className="p-4 shadow-lg border-0 bg-light">
+//               <h2 className="fw-bold">{pname}</h2>
+//               <h4 className="text-muted">Rs. {price}</h4>
+//               <p className="text-secondary">{desc}</p>
 
-//                     <button
-//                       className="btn btn-outline-danger px-4 py-2 rounded-pill d-flex align-items-center gap-2"
-//                       onClick={handleAddToWishlist}
-//                     >
-//                       <i className="fa-solid fa-heart fs-5"></i> Wishlist
-//                     </button>
-//                   </div>
-//                 </Card.Body>
-//               </Card>
-//             </Col>
-//           </Row>
-//         </div>
+//               <button
+//                 className="add-to-cart-btn px-4 py-2 rounded-pill"
+//                 onClick={handleAddToCart}
+//               >
+//                 Add to Cart
+//               </button>
 
-//         {/* 📝 Reviews Section */}
-//         <div className="container py-4">
-//           <h3 className="Review-title text-dark fw-bold">Write a Review</h3>
-//           <form onSubmit={handleSubmitReview} className="form mt-3">
-//             <div className="mb-3">
-//               <textarea
-//                 className="form-control shadow-sm p-3"
-//                 rows="4"
-//                 placeholder="Share your experience with this product..."
-//                 value={reviewText}
-//                 onChange={(e) => setReviewText(e.target.value)}
-//                 required
-//                 style={{ borderRadius: "8px", resize: "none" }}
-//               />
-//             </div>
-//             <button type="submit" className="btn btn-success px-4 py-2 rounded-pill shadow">
-//               Submit Review
-//             </button>
-//           </form>
-
-//           <h3 className="mt-5 mb-3 Customer-Reviews-title text-dark fw-bold">
-//             Customer Reviews
-//           </h3>
-
-//           {reviews.length > 0 ? (
-//             <ul className="list-group mb-4">
-//               {reviews.map((rev) => (
-//                 <li
-//                   key={rev._id}
-//                   className="list-group-item border-0 shadow-sm rounded p-3 mb-3 d-flex align-items-start justify-content-between bg-light"
-//                 >
-//                   <div className="w-100">
-//                     <div className="d-flex flex-column flex-md-row align-items-start">
-//                       <strong className="text-primary">{rev.userName}:</strong>
-//                       <p className="ms-md-3 text-dark">{rev.review || "No review content"}</p>
-//                     </div>
-//                     <span className="text-muted small">
-//                       {rev.createdAt
-//                         ? new Date(rev.createdAt).toLocaleString()
-//                         : "Unknown Date"}
-//                     </span>
-//                   </div>
-
-//                   {user?.name === rev.userName && (
-//                     <button
-//                       className="btn btn-danger d-flex align-items-center justify-content-center shadow"
-//                       onClick={() => handleDeleteReview(rev._id)}
-//                       title="Delete Review"
-//                       style={{
-//                         borderRadius: "50%",
-//                         padding: "0.6rem",
-//                         minWidth: "40px",
-//                         minHeight: "40px",
-//                       }}
-//                     >
-//                       <i className="fa-solid fa-trash"></i>
-//                     </button>
-//                   )}
-//                 </li>
-//               ))}
-//             </ul>
-//           ) : (
-//             <p className="text-muted text-center fs-5">
-//               No reviews yet. Be the first to leave one! 😊
-//             </p>
-//           )}
-//         </div>
+//               <Link to="/display" className="btn btn-dark px-4 py-2 rounded-pill mt-2">
+//                 Back
+//               </Link>
+//             </Card>
+//           </Col>
+//         </Row>
 //       </div>
+
+//       {/* ---------- REVIEWS ---------- */}
+//       <div className="container py-4">
+//         <h3>Write a Review</h3>
+//         <form onSubmit={handleSubmitReview}>
+//           <textarea
+//             className="form-control"
+//             rows="3"
+//             placeholder="Your review..."
+//             value={reviewText}
+//             onChange={(e) => setReviewText(e.target.value)}
+//             required
+//           />
+//           <button className="btn btn-success mt-3">Submit</button>
+//         </form>
+
+//         <h3 className="mt-4">Customer Reviews</h3>
+//         {reviews.length > 0 ? (
+//           <ul className="list-group mt-3">
+//             {reviews.map((rev) => (
+//               <li
+//                 className="list-group-item d-flex justify-content-between"
+//                 key={rev._id}
+//               >
+//                 <div>
+//                   <strong>{rev.userName}</strong>
+//                   <p>{rev.review}</p>
+//                 </div>
+
+//                 {user?.name === rev.userName && (
+//                   <button
+//                     onClick={() => handleDeleteReview(rev._id)}
+//                     className="btn btn-danger btn-sm"
+//                   >
+//                     Delete
+//                   </button>
+//                 )}
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           <p>No reviews yet.</p>
+//         )}
+//       </div>
+
 //       <Footer />
 //       <ToastContainer />
 //     </>
@@ -257,91 +203,460 @@
 
 
 
+// // src/pages/ProductDetails.jsx
+// import React, { useEffect, useState, useContext } from "react";
+// import { useParams, Link, useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import { Card, Row, Col, Button } from "react-bootstrap";
+// import Navbar from "./navbar";
+// import Footer from "./footer";
+// import { userContext } from "../App";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import "../assets/css/products.css";
+
+// const ProductDetails = () => {
+//   const { id } = useParams();
+//   const [product, setProduct] = useState(null);
+//   const [reviews, setReviews] = useState([]);
+//   const [reviewText, setReviewText] = useState("");
+//   const { user } = useContext(userContext);
+//   const navigate = useNavigate();
+
+//   const userId = user?._id || user?.userId || sessionStorage.getItem("userId");
+
+//   // FETCH PRODUCT
+//   useEffect(() => {
+//     axios.get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`)
+//       .then(res => setProduct(res.data))
+//       .catch(() => toast.error("Product not found"));
+//   }, [id]);
+
+//   // FETCH REVIEWS
+//   useEffect(() => {
+//     axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`)
+//       .then(res => setReviews(Array.isArray(res.data) ? res.data : res.data.reviews || []))
+//       .catch(() => setReviews([]));
+//   }, [id]);
+
+//   // ADD TO CART
+//   const handleAddToCart = () => {
+//     if (!userId) { toast.error("Login first!"); navigate("/login"); return; }
+
+//     axios.post(`${process.env.REACT_APP_API_URL}/cart`, { userId, product })
+//       .then(() => toast.success("Added to cart!"))
+//       .catch(() => toast.error("Failed to add"));
+//   };
+
+//   // ADD TO WISHLIST (API)
+//   const handleAddToWishlist = () => {
+//     if (!userId) { toast.error("Login first!"); navigate("/login"); return; }
+
+//     axios.post(`${process.env.REACT_APP_API_URL}/wishlist`, { userId, product })
+//       .then(() => toast.success(`${product.pname} added to wishlist!`))
+//       .catch(err => {
+//         const msg = err.response?.data?.error || "Failed to add";
+//         toast.error(msg);
+//       });
+//   };
+
+//   // SUBMIT REVIEW
+//   const handleSubmitReview = (e) => {
+//     e.preventDefault();
+//     if (!user) { toast.error("Login required"); return; }
+
+//     axios.post(`${process.env.REACT_APP_API_URL}/review`, {
+//       productId: id,
+//       userName: user.name,
+//       review: reviewText,
+//     })
+//     .then(() => {
+//       setReviewText("");
+//       toast.success("Review submitted!");
+//       return axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
+//     })
+//     .then(res => setReviews(Array.isArray(res.data) ? res.data : res.data.reviews || []))
+//     .catch(() => toast.error("Review failed"));
+//   };
+
+//   // DELETE REVIEW
+//   const handleDeleteReview = (reviewId) => {
+//     axios.delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`)
+//       .then(() => {
+//         setReviews(prev => prev.filter(r => r._id !== reviewId));
+//         toast.success("Review deleted");
+//       })
+//       .catch(() => toast.error("Delete failed"));
+//   };
+
+//   if (!product) return <p className="text-center py-5">Loading...</p>;
+
+//   const { pname, price, desc, image } = product;
+//   const imagePath = image || "https://via.placeholder.com/400x300";
+
+//   return (
+//     <>
+//       <Navbar />
+//       <div className="container py-5">
+//         <Row className="g-4 align-items-start">
+//           <Col md={6}>
+//             <Card className="border-0 shadow-sm overflow-hidden">
+//               <img src={imagePath} className="img-fluid" alt={pname} />
+//             </Card>
+//           </Col>
+
+//           <Col md={6}>
+//             <Card className="p-4 border-0 shadow-sm bg-light h-100">
+//               <h2 className="fw-bold mb-2">{pname}</h2>
+//               <h4 className="text-success mb-3">₹{price}</h4>
+//               <p className="text-secondary mb-4">{desc}</p>
+
+//               <div className="d-flex gap-2 flex-wrap">
+//                 <Button
+//                   className="px-4 py-2 rounded-pill"
+//                   onClick={handleAddToCart}
+//                 >
+//                   Add to Cart
+//                 </Button>
+
+//                 <Button
+//                   variant="outline-danger"
+//                   className="px-4 py-2 rounded-pill d-flex align-items-center gap-2"
+//                   onClick={handleAddToWishlist}
+//                 >
+//                   Wishlist
+//                 </Button>
+//               </div>
+
+//               <Link to="/display" className="btn btn-dark px-4 py-2 rounded-pill mt-3 w-100">
+//                 Back to Products
+//               </Link>
+//             </Card>
+//           </Col>
+//         </Row>
+
+//         {/* REVIEWS */}
+//         <div className="mt-5">
+//           <h3 className="mb-3">Write a Review</h3>
+//           <form onSubmit={handleSubmitReview} className="mb-4">
+//             <textarea
+//               className="form-control mb-2"
+//               rows="3"
+//               placeholder="Share your thoughts..."
+//               value={reviewText}
+//               onChange={(e) => setReviewText(e.target.value)}
+//               required
+//             />
+//             <Button type="submit" className="px-4">Submit</Button>
+//           </form>
+
+//           <h3>Customer Reviews</h3>
+//           {reviews.length > 0 ? (
+//             <div className="list-group">
+//               {reviews.map(rev => (
+//                 <div key={rev._id} className="list-group-item d-flex justify-content-between align-items-start p-3">
+//                   <div>
+//                     <strong>{rev.userName}</strong>
+//                     <p className="mb-1">{rev.review}</p>
+//                     <small className="text-muted">
+//                       {new Date(rev.createdAt).toLocaleString()}
+//                     </small>
+//                   </div>
+//                   {user?.name === rev.userName && (
+//                     <Button size="sm" variant="danger" onClick={() => handleDeleteReview(rev._id)}>
+//                       Delete
+//                     </Button>
+//                   )}
+//                 </div>
+//               ))}
+//             </div>
+//           ) : (
+//             <p className="text-muted">No reviews yet.</p>
+//           )}
+//         </div>
+//       </div>
+
+//       <Footer />
+//       <ToastContainer />
+//     </>
+//   );
+// };
+
+// export default ProductDetails;
+
+
+
+// // src/pages/ProductDetails.jsx
+// import React, { useEffect, useState, useContext } from "react";
+// import { useParams, Link, useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import { Card, Row, Col, Button } from "react-bootstrap";
+// import Navbar from "./navbar";
+// import Footer from "./footer";
+// import { userContext } from "../App";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import "../assets/css/products.css";
+
+// const ProductDetails = () => {
+//   const { id } = useParams();
+//   const [product, setProduct] = useState(null);
+//   const [reviews, setReviews] = useState([]);
+//   const [reviewText, setReviewText] = useState("");
+//   const { user } = useContext(userContext);
+//   const navigate = useNavigate();
+
+//   const userId = user?._id || user?.userId || sessionStorage.getItem("userId");
+
+//   // FETCH PRODUCT
+//   useEffect(() => {
+//     axios.get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`)
+//       .then(res => setProduct(res.data))
+//       .catch(() => toast.error("Product not found"));
+//   }, [id]);
+
+//   // FETCH REVIEWS
+//   useEffect(() => {
+//     axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`)
+//       .then(res => setReviews(Array.isArray(res.data) ? res.data : res.data.reviews || []))
+//       .catch(() => setReviews([]));
+//   }, [id]);
+
+//   // ADD TO CART
+//   const handleAddToCart = () => {
+//     if (!userId) { toast.error("Login first!"); navigate("/login"); return; }
+
+//     axios.post(`${process.env.REACT_APP_API_URL}/cart`, { userId, product })
+//       .then(() => toast.success("Added to cart!"))
+//       .catch(() => toast.error("Failed to add"));
+//   };
+
+//   // ADD TO WISHLIST (API)
+//   const handleAddToWishlist = () => {
+//     if (!userId) { toast.error("Login first!"); navigate("/login"); return; }
+
+//     axios.post(`${process.env.REACT_APP_API_URL}/wishlist`, { userId, product })
+//       .then(() => toast.success(`${product.pname} added to wishlist!`))
+//       .catch(err => {
+//         const msg = err.response?.data?.error || "Failed to add";
+//         toast.error(msg);
+//       });
+//   };
+
+//   // SUBMIT REVIEW
+//   const handleSubmitReview = (e) => {
+//     e.preventDefault();
+//     if (!user) { toast.error("Login required"); return; }
+
+//     axios.post(`${process.env.REACT_APP_API_URL}/review`, {
+//       productId: id,
+//       userName: user.name,
+//       review: reviewText,
+//     })
+//     .then(() => {
+//       setReviewText("");
+//       toast.success("Review submitted!");
+//       return axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
+//     })
+//     .then(res => setReviews(Array.isArray(res.data) ? res.data : res.data.reviews || []))
+//     .catch(() => toast.error("Review failed"));
+//   };
+
+//   // DELETE REVIEW
+//   const handleDeleteReview = (reviewId) => {
+//     axios.delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`)
+//       .then(() => {
+//         setReviews(prev => prev.filter(r => r._id !== reviewId));
+//         toast.success("Review deleted");
+//       })
+//       .catch(() => toast.error("Delete failed"));
+//   };
+
+//   if (!product) return <p className="text-center py-5">Loading...</p>;
+
+//   const { pname, price, desc, image } = product;
+//   const imagePath = image || "https://via.placeholder.com/400x300";
+
+//   return (
+//     <>
+//       <Navbar />
+//       <div className="container py-5">
+//         <Row className="g-4 align-items-start">
+//           <Col md={6}>
+//             <Card className="border-0 shadow-sm overflow-hidden">
+//               <img src={imagePath} className="img-fluid" alt={pname} />
+//             </Card>
+//           </Col>
+
+//           <Col md={6}>
+//             <Card className="p-4 border-0 shadow-sm bg-light h-100">
+//               <h2 className="fw-bold mb-2">{pname}</h2>
+//               <h4 className="text-success mb-3">₹{price}</h4>
+//               <p className="text-secondary mb-4">{desc}</p>
+
+//               <div className="d-flex gap-2 flex-wrap">
+//                 <Button
+//                   className="px-4 py-2 rounded-pill"
+//                   onClick={handleAddToCart}
+//                 >
+//                   Add to Cart
+//                 </Button>
+
+//                 <Button
+//                   variant="outline-danger"
+//                   className="px-4 py-2 rounded-pill d-flex align-items-center gap-2"
+//                   onClick={handleAddToWishlist}
+//                 >
+//                   Wishlist
+//                 </Button>
+//               </div>
+
+//               <Link to="/display" className="btn btn-dark px-4 py-2 rounded-pill mt-3 w-100">
+//                 Back to Products
+//               </Link>
+//             </Card>
+//           </Col>
+//         </Row>
+
+//         {/* REVIEWS */}
+//         <div className="mt-5">
+//           <h3 className="mb-3">Write a Review</h3>
+//           <form onSubmit={handleSubmitReview} className="mb-4">
+//             <textarea
+//               className="form-control mb-2"
+//               rows="3"
+//               placeholder="Share your thoughts..."
+//               value={reviewText}
+//               onChange={(e) => setReviewText(e.target.value)}
+//               required
+//             />
+//             <Button type="submit" className="px-4">Submit</Button>
+//           </form>
+
+//           <h3>Customer Reviews</h3>
+//           {reviews.length > 0 ? (
+//             <div className="list-group">
+//               {reviews.map(rev => (
+//                 <div key={rev._id} className="list-group-item d-flex justify-content-between align-items-start p-3">
+//                   <div>
+//                     <strong>{rev.userName}</strong>
+//                     <p className="mb-1">{rev.review}</p>
+//                     <small className="text-muted">
+//                       {new Date(rev.createdAt).toLocaleString()}
+//                     </small>
+//                   </div>
+//                   {user?.name === rev.userName && (
+//                     <Button size="sm" variant="danger" onClick={() => handleDeleteReview(rev._id)}>
+//                       Delete
+//                     </Button>
+//                   )}
+//                 </div>
+//               ))}
+//             </div>
+//           ) : (
+//             <p className="text-muted">No reviews yet.</p>
+//           )}
+//         </div>
+//       </div>
+
+//       <Footer />
+//       <ToastContainer />
+//     </>
+//   );
+// };
+
+// export default ProductDetails;
+
+
+// src/pages/ProductDetails.jsx
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button, Spinner } from "react-bootstrap";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import { userContext } from "../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../assets/css/products.css";
 
 const ProductDetails = () => {
-  const { id } = useParams();               // product id
+  const { id } = useParams(); // productId
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState("");
-  const { user } = useContext(userContext); // <-- user from context
+  const [loading, setLoading] = useState(true);
+  const { user } = useContext(userContext);
   const navigate = useNavigate();
 
-  // ---------- 1. FETCH PRODUCT ----------
+  const userId = user?._id || user?.userId || sessionStorage.getItem("userId");
+
+  // FETCH PRODUCT
   useEffect(() => {
+    if (!id) {
+      toast.error("Invalid product");
+      navigate("/display");
+      return;
+    }
+
+    setLoading(true);
     axios
       .get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`)
-      .then((res) => setProduct(res.data))
-      .catch((err) => console.error("Product fetch error:", err));
-  }, [id]);
+      .then((res) => {
+        if (!res.data) throw new Error("Empty response");
+        setProduct(res.data);
+      })
+      .catch((err) => {
+        console.error("Product error:", err);
+        toast.error("Product not found");
+        navigate("/display");
+      })
+      .finally(() => setLoading(false));
+  }, [id, navigate]);
 
-  // ---------- 2. FETCH REVIEWS ----------
+  // FETCH REVIEWS
   useEffect(() => {
+    if (!id) return;
     axios
       .get(`${process.env.REACT_APP_API_URL}/review/${id}`)
       .then((res) => {
-        const list = Array.isArray(res.data) ? res.data : res.data.reviews || [];
-        setReviews(list);
+        const data = Array.isArray(res.data) ? res.data : res.data.reviews || [];
+        setReviews(data);
       })
       .catch(() => setReviews([]));
   }, [id]);
 
-  // ---------- 3. ADD TO CART ----------
+  // ADD TO CART
   const handleAddToCart = () => {
-    // ---- a) GET USER ID (context → sessionStorage fallback) ----
-    const contextUserId = user?.userId || user?._id;          // adjust field name
-    const sessionUserId = sessionStorage.getItem("userId");
-    const finalUserId = contextUserId || sessionUserId;
+    if (!userId) return loginRedirect();
+    if (!product) return;
 
-    console.log("=== ADD TO CART DEBUG ===");
-    console.log("context user →", user);
-    console.log("session userId →", sessionUserId);
-    console.log("finalUserId used →", finalUserId);
-    console.log("product →", product);
-
-    if (!finalUserId) {
-      toast.error("Please login first!");
-      navigate("/login");
-      return;
-    }
-
-    if (!product?._id) {
-      toast.error("Product not loaded yet");
-      return;
-    }
-
-    // ---- b) CALL API ----
     axios
-      .post(`${process.env.REACT_APP_API_URL}/cart`, {
-        userId: finalUserId,
-        product,                         // whole product object (pname, price, image, _id)
-      })
-      .then((res) => {
-        console.log("Cart API success →", res.data);
-        toast.success(res.data.message || "Added to cart!");
-      })
-      .catch((err) => {
-        console.error("Cart API error →", err.response?.data || err);
-        toast.error(err.response?.data?.error || "Failed to add to cart");
-      });
+      .post(`${process.env.REACT_APP_API_URL}/cart`, { userId, product })
+      .then(() => toast.success("Added to cart!"))
+      .catch(() => toast.error("Failed"));
   };
 
-  // ---------- 4. SUBMIT REVIEW (unchanged) ----------
+  // ADD TO WISHLIST
+  const handleAddToWishlist = () => {
+    if (!userId) return loginRedirect();
+    if (!product) return;
+
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/wishlist`, { userId, product })
+      .then(() => toast.success(`${product.pname} added to wishlist!`))
+      .catch((err) => toast.error(err.response?.data?.error || "Failed"));
+  };
+
+  const loginRedirect = () => {
+    toast.error("Please login first!");
+    navigate("/login");
+  };
+
+  // SUBMIT REVIEW
   const handleSubmitReview = (e) => {
     e.preventDefault();
-    if (!user) {
-      toast.error("Login required!");
-      return;
-    }
+    if (!user?.name) return toast.error("Login required");
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/review`, {
         productId: id,
@@ -353,11 +668,14 @@ const ProductDetails = () => {
         toast.success("Review submitted!");
         return axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
       })
-      .then((res) => setReviews(res.data))
-      .catch(() => toast.error("Error submitting review"));
+      .then((res) => {
+        const data = Array.isArray(res.data) ? res.data : res.data.reviews || [];
+        setReviews(data);
+      })
+      .catch(() => toast.error("Submit failed"));
   };
 
-  // ---------- 5. DELETE REVIEW ----------
+  // DELETE REVIEW
   const handleDeleteReview = (reviewId) => {
     axios
       .delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`)
@@ -365,92 +683,122 @@ const ProductDetails = () => {
         setReviews((prev) => prev.filter((r) => r._id !== reviewId));
         toast.success("Review deleted");
       })
-      .catch(() => toast.error("Error deleting review"));
+      .catch(() => toast.error("Delete failed"));
   };
 
-  if (!product) return <p className="text-center">Loading...</p>;
+  // LOADING STATE
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="container text-center py-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3">Loading product...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
-  const { pname, price, desc, image } = product;
-  const imagePath = image || "https://via.placeholder.com/400x300";
+  // ERROR STATE (already handled in useEffect)
+  if (!product) return null;
+
+  const imagePath = product.image || "https://via.placeholder.com/400x300?text=No+Image";
 
   return (
     <>
       <Navbar />
       <div className="container py-5">
-        <Row className="align-items-center">
+        <Row className="g-4">
           <Col md={6}>
-            <Card className="shadow-lg border-0">
-              <img src={imagePath} className="img-fluid" alt={pname} />
+            <Card className="border-0 shadow-sm overflow-hidden">
+              <img
+                src={imagePath}
+                className="img-fluid"
+                alt={product.pname}
+                onError={(e) => (e.target.src = "https://via.placeholder.com/400x300?text=Error")}
+              />
             </Card>
           </Col>
 
           <Col md={6}>
-            <Card className="p-4 shadow-lg border-0 bg-light">
-              <h2 className="fw-bold">{pname}</h2>
-              <h4 className="text-muted">Rs. {price}</h4>
-              <p className="text-secondary">{desc}</p>
+            <Card className="p-4 border-0 shadow-sm bg-light h-100">
+              <h2 className="fw-bold mb-2">{product.pname}</h2>
+              <h4 className="text-success mb-3">₹{product.price}</h4>
+              <p className="text-secondary mb-4">{product.desc}</p>
 
-              <button
-                className="btn btn-dark px-4 py-2 mt-3"
-                onClick={handleAddToCart}
-              >
-                Add to Cart
-              </button>
+              <div className="d-flex gap-2 flex-wrap">
+                <Button className="px-4 py-2 rounded-pill" onClick={handleAddToCart}>
+                  Add to Cart
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="px-4 py-2 rounded-pill d-flex align-items-center gap-2"
+                  onClick={handleAddToWishlist}
+                >
+                  Wishlist
+                </Button>
+              </div>
 
-              <Link to="/" className="btn btn-outline-secondary px-4 py-2 mt-3 ms-3">
-                Back
+              <Link to="/display" className="btn btn-dark w-100 mt-3 rounded-pill">
+                Back to Products
               </Link>
             </Card>
           </Col>
         </Row>
-      </div>
 
-      {/* ---------- REVIEWS ---------- */}
-      <div className="container py-4">
-        <h3>Write a Review</h3>
-        <form onSubmit={handleSubmitReview}>
-          <textarea
-            className="form-control"
-            rows="3"
-            placeholder="Your review..."
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            required
-          />
-          <button className="btn btn-success mt-3">Submit</button>
-        </form>
+        {/* REVIEWS */}
+        <div className="mt-5">
+          <h3 className="mb-3">Write a Review</h3>
+          <form onSubmit={handleSubmitReview} className="mb-4">
+            <textarea
+              className="form-control mb-2"
+              rows="3"
+              placeholder="Share your thoughts..."
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              required
+            />
+            <Button type="submit" className="px-4 rounded-pill">
+              Submit Review
+            </Button>
+          </form>
 
-        <h3 className="mt-4">Customer Reviews</h3>
-        {reviews.length > 0 ? (
-          <ul className="list-group mt-3">
-            {reviews.map((rev) => (
-              <li
-                className="list-group-item d-flex justify-content-between"
-                key={rev._id}
-              >
-                <div>
-                  <strong>{rev.userName}</strong>
-                  <p>{rev.review}</p>
+          <h3>Customer Reviews</h3>
+          {reviews.length > 0 ? (
+            <div className="list-group">
+              {reviews.map((rev) => (
+                <div
+                  key={rev._id}
+                  className="list-group-item d-flex justify-content-between align-items-start p-3 border rounded mb-2"
+                >
+                  <div>
+                    <strong>{rev.userName}</strong>
+                    <p className="mb-1">{rev.review}</p>
+                    <small className="text-muted">
+                      {new Date(rev.createdAt).toLocaleString("en-IN")}
+                    </small>
+                  </div>
+                  {user?.name === rev.userName && (
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      onClick={() => handleDeleteReview(rev._id)}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </div>
-
-                {user?.name === rev.userName && (
-                  <button
-                    onClick={() => handleDeleteReview(rev._id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No reviews yet.</p>
-        )}
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted">No reviews yet. Be the first!</p>
+          )}
+        </div>
       </div>
 
       <Footer />
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </>
   );
 };

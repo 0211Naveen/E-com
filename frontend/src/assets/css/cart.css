@@ -1,0 +1,64 @@
+/* src/assets/css/cart-simple.css */
+.cart-simple {
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.item-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.item-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.total-card {
+  background: #f8f9fa;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.checkout-btn {
+  /* background: #00ff0d; */
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 600;
+}
+
+.empty-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background: #f8f9fa;
+}
+
+@media (max-width: 576px) {
+  .item-card .btn {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .item-img {
+    width: 60px;
+    height: 60px;
+  }
+}

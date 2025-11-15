@@ -67,6 +67,9 @@ app.use("/addproducts", productRoutes);
 
 app.use("/cart", cartRoutes);
 
+app.use("/wishlist", require("./routes/wishlist"));
+
+
 
 // Register
 app.post('/register', CustomerModel);
@@ -225,15 +228,6 @@ app.get('/getPrivileges', async (req, res) => {
 
 
 
-
-
-// Server port
-
-// const PORT = process.env.PORT || 3001; // fallback if .env missing
-// app.listen(PORT, () => {
-//     console.log(`🚀 Server is running on port ${PORT}`);
-// });
-
 // ✅ Root route
 app.get("/", (req, res) => {
   res.send("🚀 Backend Server Running Successfully!");
@@ -338,6 +332,11 @@ module.exports = app;
 //     res.status(500).json({ error: err.message });
 //   }
 // });
+
+
+// app.use("/wishlist", require("./routes/wishlist"));
+
+
 
 // // Orders
 // app.post("/orders", orderModel);
