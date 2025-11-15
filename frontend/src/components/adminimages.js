@@ -177,7 +177,7 @@ const Adminimages = () => {
                                                     <td>{index + 1}</td>
                                                     <td>
                                                         <img
-                                                            src={banner.path}
+                                                            src={banner.url}
                                                             alt={`Banner ${index + 1}`}
                                                             className="banner-thumbnail"
                                                             style={{ width: "100px", height: "auto", borderRadius: "5px" }}

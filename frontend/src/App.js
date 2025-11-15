@@ -27,7 +27,7 @@ import UserDashboard from './components/userdashboard'
 import Adminimages from './components/adminimages';
 import Group from './components/group';
 import Show from './components/show';
-import AdminRegister from './components/adminregister';
+// import AdminRegister from './components/adminregister';
 import AdminLogin from './components/adminlogin';
 import Storereg from './components/storereg';
 import Storelog from './components/storelog';
@@ -160,7 +160,7 @@ function App() {
         <Route path="/Addproducts" element={<AdminProtectedRoute> <Addproducts /> </AdminProtectedRoute>} />
 
         {/* .env  */}
-        <Route path="/adminreg" element={<AdminRegister />} />
+        {/* <Route path="/adminreg" element={<AdminRegister />} /> */}
         {/* .env  */}
         <Route path="/adminlog" element={<AdminLogin />} />
 
@@ -181,6 +181,8 @@ function App() {
       </Routes>
     </userContext.Provider>
   );
+
+
 }
 
 export default App;

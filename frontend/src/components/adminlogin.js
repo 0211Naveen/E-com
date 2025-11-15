@@ -63,10 +63,10 @@ const AdminLogin = () => {
                                 Login
                             </button>
                         </form>
-                        <p className="text-center mt-3">Don't have an account?</p>
+                        {/* <p className="text-center mt-3">Don't have an account?</p>
                         <Link to="/adminreg" className="btn btn-light border w-100 rounded-0 text-decoration-none">
                             Sign Up
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
     );
