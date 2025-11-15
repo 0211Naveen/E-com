@@ -125,18 +125,21 @@ function App() {
         <Route path="/order" element={<Order />} />
         <Route path="/orderpdf" element={<Orderpdf />} />
         {/* .env  */}
-        <Route path="/hi/:id" element={<ProductDetails addToCart={addToCart} updateQuantity={updateQuantity} cart={cart} addToWishlist={addToWishlist} />} />
+        {/* <Route path="/hi/:id" element={<ProductDetails addToCart={addToCart} updateQuantity={updateQuantity} cart={cart} addToWishlist={addToWishlist} />} /> */}
 
         {/* .env */}
         <Route path="/display" element={<ProtectedRoute><Display addToCart={addToCart} /></ProtectedRoute>} />
         {/* .env  */}
-        <Route path="/cart" element={<ProtectedRoute><Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} /></ProtectedRoute>} />
+        {/* <Route path="/cart" element={<ProtectedRoute><Cart cart={cart} removeFromCart={removeFromCart} updateQuantity={updateQuantity} /></ProtectedRoute>} /> */}
         {/* .env  */}
         <Route path="/wishlist" element={<ProtectedRoute><Wishlist wishlist={wishlist} removeFromWishlist={removeFromWishlist} /></ProtectedRoute>} />
         <Route path="/blog" element={<Blog />} />
        {/* .env  */}
         <Route path="/userdashboard" element={<UserDashboard />} />
 
+
+        <Route path="/hi/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
 
 
         {/* admin  */}
