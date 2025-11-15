@@ -256,133 +256,126 @@
 
 
 
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Card, Row, Col } from 'react-bootstrap';
-import Navbar from './navbar';
-import Footer from './footer';
-import { userContext } from '../App';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import '../assets/css/products.css';
+
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Card, Row, Col } from "react-bootstrap";
+import Navbar from "./navbar";
+import Footer from "./footer";
+import { userContext } from "../App";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../assets/css/products.css";
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams();               // product id
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const { user } = useContext(userContext);
+  const { user } = useContext(userContext); // <-- user from context
   const navigate = useNavigate();
 
-  // ⭐ Fetch Product
+  // ---------- 1. FETCH PRODUCT ----------
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`)
-      .then(res => setProduct(res.data))
-      .catch(err => console.error("Error:", err));
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/addproducts/${id}`)
+      .then((res) => setProduct(res.data))
+      .catch((err) => console.error("Product fetch error:", err));
   }, [id]);
 
-  // ⭐ Fetch Reviews
+  // ---------- 2. FETCH REVIEWS ----------
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`)
-      .then(res => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/review/${id}`)
+      .then((res) => {
         const list = Array.isArray(res.data) ? res.data : res.data.reviews || [];
         setReviews(list);
       })
       .catch(() => setReviews([]));
   }, [id]);
 
-  // ⭐ Add To Cart API
-//   const handleAddToCart = () => {
-//     const userId = sessionStorage.getItem("userId");
+  // ---------- 3. ADD TO CART ----------
+  const handleAddToCart = () => {
+    // ---- a) GET USER ID (context → sessionStorage fallback) ----
+    const contextUserId = user?.userId || user?._id;          // adjust field name
+    const sessionUserId = sessionStorage.getItem("userId");
+    const finalUserId = contextUserId || sessionUserId;
 
-//     if (!userId) {
-//       toast.error("Please login first");
-//       navigate("/login");
-//       return;
-//     }
+    console.log("=== ADD TO CART DEBUG ===");
+    console.log("context user →", user);
+    console.log("session userId →", sessionUserId);
+    console.log("finalUserId used →", finalUserId);
+    console.log("product →", product);
 
-//     axios.post(`${process.env.REACT_APP_API_URL}/cart`, {
-//       userId,
-//       product,
-//     })
-//       .then(() => {
-//         toast.success("Added to cart!");
-//       })
-//       .catch(err => console.log(err));
-//   };
+    if (!finalUserId) {
+      toast.error("Please login first!");
+      navigate("/login");
+      return;
+    }
 
+    if (!product?._id) {
+      toast.error("Product not loaded yet");
+      return;
+    }
 
-// ⭐ Add To Cart API
-const handleAddToCart = () => {
-  const userId = sessionStorage.getItem("userId");
+    // ---- b) CALL API ----
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/cart`, {
+        userId: finalUserId,
+        product,                         // whole product object (pname, price, image, _id)
+      })
+      .then((res) => {
+        console.log("Cart API success →", res.data);
+        toast.success(res.data.message || "Added to cart!");
+      })
+      .catch((err) => {
+        console.error("Cart API error →", err.response?.data || err);
+        toast.error(err.response?.data?.error || "Failed to add to cart");
+      });
+  };
 
-  if (!userId) {
-    toast.error("Please login first!");
-    navigate("/login");
-    return;
-  }
-
-  axios.post(`${process.env.REACT_APP_API_URL}/cart`, {
-    userId,
-    product,
-  })
-  .then(() => {
-    toast.success("Added to cart!");
-  })
-  .catch(err => {
-    console.error(err);
-    toast.error("Something went wrong");
-  });
-};
-
-
-  // ⭐ Submit Review
+  // ---------- 4. SUBMIT REVIEW (unchanged) ----------
   const handleSubmitReview = (e) => {
     e.preventDefault();
-
     if (!user) {
       toast.error("Login required!");
       return;
     }
-
-    axios.post(`${process.env.REACT_APP_API_URL}/review`, {
-      productId: id,
-      userName: user.name,
-      review: reviewText,
-    })
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/review`, {
+        productId: id,
+        userName: user.name,
+        review: reviewText,
+      })
       .then(() => {
         setReviewText("");
         toast.success("Review submitted!");
-
-        axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`)
-          .then(res => setReviews(res.data));
+        return axios.get(`${process.env.REACT_APP_API_URL}/review/${id}`);
       })
+      .then((res) => setReviews(res.data))
       .catch(() => toast.error("Error submitting review"));
   };
 
-  // ⭐ Delete Review
+  // ---------- 5. DELETE REVIEW ----------
   const handleDeleteReview = (reviewId) => {
-    axios.delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`)
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/review/${reviewId}`)
       .then(() => {
-        setReviews(reviews.filter(r => r._id !== reviewId));
+        setReviews((prev) => prev.filter((r) => r._id !== reviewId));
         toast.success("Review deleted");
       })
       .catch(() => toast.error("Error deleting review"));
   };
 
-  if (!product) return <p>Loading...</p>;
+  if (!product) return <p className="text-center">Loading...</p>;
 
   const { pname, price, desc, image } = product;
-
-  // CLOUDINARY IMAGE (DIRECT URL)
-  const imagePath = image ? image : "https://via.placeholder.com/400x300";
+  const imagePath = image || "https://via.placeholder.com/400x300";
 
   return (
     <>
       <Navbar />
-
       <div className="container py-5">
         <Row className="align-items-center">
           <Col md={6}>
@@ -397,7 +390,10 @@ const handleAddToCart = () => {
               <h4 className="text-muted">Rs. {price}</h4>
               <p className="text-secondary">{desc}</p>
 
-              <button className="btn btn-dark px-4 py-2 mt-3" onClick={handleAddToCart}>
+              <button
+                className="btn btn-dark px-4 py-2 mt-3"
+                onClick={handleAddToCart}
+              >
                 Add to Cart
               </button>
 
@@ -409,10 +405,9 @@ const handleAddToCart = () => {
         </Row>
       </div>
 
-      {/* ⭐ Reviews Section */}
+      {/* ---------- REVIEWS ---------- */}
       <div className="container py-4">
         <h3>Write a Review</h3>
-        
         <form onSubmit={handleSubmitReview}>
           <textarea
             className="form-control"
@@ -421,24 +416,28 @@ const handleAddToCart = () => {
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
             required
-          ></textarea>
-
+          />
           <button className="btn btn-success mt-3">Submit</button>
         </form>
 
         <h3 className="mt-4">Customer Reviews</h3>
-
         {reviews.length > 0 ? (
           <ul className="list-group mt-3">
             {reviews.map((rev) => (
-              <li className="list-group-item d-flex justify-content-between" key={rev._id}>
+              <li
+                className="list-group-item d-flex justify-content-between"
+                key={rev._id}
+              >
                 <div>
                   <strong>{rev.userName}</strong>
                   <p>{rev.review}</p>
                 </div>
 
                 {user?.name === rev.userName && (
-                  <button onClick={() => handleDeleteReview(rev._id)} className="btn btn-danger">
+                  <button
+                    onClick={() => handleDeleteReview(rev._id)}
+                    className="btn btn-danger btn-sm"
+                  >
                     Delete
                   </button>
                 )}
