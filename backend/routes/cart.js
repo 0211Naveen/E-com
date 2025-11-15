@@ -144,4 +144,17 @@ router.delete("/remove/:id", async (req, res) => {
   }
 });
 
+
+
+// GET CART COUNT ONLY (lightweight)
+router.get("/count/:userId", async (req, res) => {
+  try {
+    const items = await Cart.find({ userId: req.params.userId });
+    const count = items.reduce((sum, item) => sum + item.quantity, 0);
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
