@@ -294,24 +294,49 @@ const ProductDetails = () => {
   }, [id]);
 
   // ⭐ Add To Cart API
-  const handleAddToCart = () => {
-    const userId = sessionStorage.getItem("userId");
+//   const handleAddToCart = () => {
+//     const userId = sessionStorage.getItem("userId");
 
-    if (!userId) {
-      toast.error("Please login first");
-      navigate("/login");
-      return;
-    }
+//     if (!userId) {
+//       toast.error("Please login first");
+//       navigate("/login");
+//       return;
+//     }
 
-    axios.post(`${process.env.REACT_APP_API_URL}/cart`, {
-      userId,
-      product,
-    })
-      .then(() => {
-        toast.success("Added to cart!");
-      })
-      .catch(err => console.log(err));
-  };
+//     axios.post(`${process.env.REACT_APP_API_URL}/cart`, {
+//       userId,
+//       product,
+//     })
+//       .then(() => {
+//         toast.success("Added to cart!");
+//       })
+//       .catch(err => console.log(err));
+//   };
+
+
+// ⭐ Add To Cart API
+const handleAddToCart = () => {
+  const userId = sessionStorage.getItem("userId");
+
+  if (!userId) {
+    toast.error("Please login first!");
+    navigate("/login");
+    return;
+  }
+
+  axios.post(`${process.env.REACT_APP_API_URL}/cart`, {
+    userId,
+    product,
+  })
+  .then(() => {
+    toast.success("Added to cart!");
+  })
+  .catch(err => {
+    console.error(err);
+    toast.error("Something went wrong");
+  });
+};
+
 
   // ⭐ Submit Review
   const handleSubmitReview = (e) => {
