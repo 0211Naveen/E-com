@@ -40,15 +40,30 @@ exports.getOrders = async (req, res) => {
 
 
 
+// exports.getOrderCount = async (req, res) => {
+//     try {
+//         const count = await Order.countDocuments({});
+//         res.json({ count });
+//     } catch (error) {
+//         console.error('Error counting orders:', error);
+//         res.status(500).json({ message: 'Failed to retrieve order count' });
+//     }
+// };
+
 exports.getOrderCount = async (req, res) => {
     try {
-        const count = await Order.countDocuments({});
+        const count = await Order.countDocuments({
+            status: { $in: ["Ordered", "Packed", "Shipped"] }
+        });
+
         res.json({ count });
+
     } catch (error) {
-        console.error('Error counting orders:', error);
-        res.status(500).json({ message: 'Failed to retrieve order count' });
+        console.error("Error counting orders:", error);
+        res.status(500).json({ message: "Failed to retrieve order count" });
     }
 };
+
 
 
 // controllers/ordersController.js
