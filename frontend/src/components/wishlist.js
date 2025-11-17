@@ -34,7 +34,8 @@ const removeFromWishlist = (productId) => {
     .delete(`${process.env.REACT_APP_API_URL}/wishlist/${userId}/${productId}`)
     .then((res) => {
   
-      setWishlist((prev) => prev.filter((item) => item.productId !== res.data.productId));
+      setWishlist(prev => prev.filter(item => item.productId !== productId));
+
 
       toast.success("Removed from wishlist");
     })
@@ -79,13 +80,27 @@ const removeFromWishlist = (productId) => {
                       className="card-img-top"
                       style={{ height: "200px", objectFit: "cover" }}
                     />
-                    <Button
+                    {/* <Button
                       size="sm"
                       variant="danger"
                       className="position-absolute top-0 end-0 m-2 rounded-circle p-2"
-                      onClick={() => removeFromWishlist(item._id)}
+                    
+                      onClick={() => removeFromWishlist(item.productId)}
+
                     >
                       X
+                    </Button> */}
+
+                    {/* Trash Icon Button */}
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      className="position-absolute top-0 end-0 m-2 rounded-circle p-2 d-flex align-items-center justify-content-center"
+                      onClick={() => removeFromWishlist(item.productId)}
+                      title="Remove from wishlist"
+                      style={{ width: "36px", height: "36px" }}
+                    >
+                      <i className="fas fa-trash-alt"></i>
                     </Button>
                   </div>
                   <Card.Body className="d-flex flex-column text-center">
