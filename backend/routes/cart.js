@@ -135,27 +135,20 @@ router.put("/update/:id", async (req, res) => {
 });
 
 // DELETE ITEM
-router.delete("/remove/:id", async (req, res) => {
+router.delete("/:userId/:productId", async (req, res) => {
   try {
-    await Cart.findByIdAndDelete(req.params.id);
-    res.json({ message: "Item removed" });
+    const { userId, productId } = req.params;
+
+    await Wishlist.findOneAndDelete({ userId, productId });
+
+    res.json({ message: "Removed successfully" });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 
-
-// // GET CART COUNT ONLY (lightweight)
-// router.get("/count/:userId", async (req, res) => {
-//   try {
-//     const items = await Cart.find({ userId: req.params.userId });
-//     const count = items.reduce((sum, item) => sum + item.quantity, 0);
-//     res.json({ count });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
 
 // GET CART COUNT (number of unique items)
 router.get("/count/:userId", async (req, res) => {

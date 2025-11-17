@@ -578,6 +578,7 @@ import Footer from "./footer";
 import { userContext } from "../App";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../assets/css/products.css";
 
 const ProductDetails = () => {
   const { id } = useParams(); // productId
@@ -728,7 +729,7 @@ const ProductDetails = () => {
               <p className="text-secondary mb-4">{product.desc}</p>
 
               <div className="d-flex gap-2 flex-wrap">
-                <Button className="px-4 py-2 rounded-pill" onClick={handleAddToCart}>
+                <Button className="add-to-cart-btn px-4 py-2 rounded-pill" onClick={handleAddToCart}>
                   Add to Cart
                 </Button>
                 <Button
@@ -765,7 +766,7 @@ const ProductDetails = () => {
           </form>
 
           <h3>Customer Reviews</h3>
-          {reviews.length > 0 ? (
+          {/* {reviews.length > 0 ? (
             <div className="list-group">
               {reviews.map((rev) => (
                 <div
@@ -779,21 +780,132 @@ const ProductDetails = () => {
                       {new Date(rev.createdAt).toLocaleString("en-IN")}
                     </small>
                   </div>
+                
+
                   {user?.name === rev.userName && (
-                    <Button
-                      size="sm"
-                      variant="danger"
-                      onClick={() => handleDeleteReview(rev._id)}
-                    >
-                      Delete
-                    </Button>
-                  )}
+  <Button
+    size="sm"
+    variant="danger"
+    onClick={() => handleDeleteReview(rev._id)}
+    className="rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm"
+    style={{ width: "36px", height: "36px" }}
+    title="Delete Review"
+  >
+    <i className="fas fa-trash"></i>
+  </Button>
+)}
                 </div>
               ))}
             </div>
           ) : (
             <p className="text-muted">No reviews yet. Be the first!</p>
+          )} */}
+
+          {reviews.length > 0 ? (
+  <div className="reviews-container mt-5 p-4 bg-light rounded-4 shadow-sm">
+    {reviews.map((rev, index) => (
+      <div
+        key={rev._id}
+        className={`review-item p-4 mb-3 rounded-3 border-start border-4 position-relative overflow-hidden ${
+          index % 2 === 0 ? "bg-white" : "bg-soft-primary"
+        }`}
+        style={{
+          borderLeftColor: index % 2 === 0 ? "#e3f2fd" : "#fff3e0",
+          transition: "all 0.3s ease",
+        }}
+        data-aos="fade-up"
+        data-aos-delay={index * 100}
+      >
+        {/* Decorative Quote */}
+        <div className="position-absolute top-0 start-0 fs-1 text-primary opacity-10">
+          “
+        </div>
+
+        <div className="d-flex align-items-start gap-3">
+          {/* Avatar */}
+          <div
+            className="flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle text-white fw-bold"
+            style={{
+              width: "48px",
+              height: "48px",
+              background: `linear-gradient(135deg, ${index % 2 === 0 ? "#4facfe, #00f2fe" : "#ff9a9e, #fad0c4"})`,
+              fontSize: "1.1rem",
+            }}
+          >
+            {rev.userName.charAt(0).toUpperCase()}
+          </div>
+
+          {/* Content */}
+          <div className="flex-grow-1">
+            <div className="d-flex justify-content-between align-items-start mb-2">
+              <h6 className="mb-0 fw-bold text-dark">{rev.userName}</h6>
+              <small className="text-muted ms-2">
+                {new Date(rev.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </small>
+            </div>
+
+            <p className="mb-0 text-secondary lh-lg" style={{ fontSize: "0.95rem" }}>
+              {rev.review}
+            </p>
+          </div>
+
+          {/* Delete Button - Only for owner */}
+          {user?.name === rev.userName && (
+            <Button
+              size="sm"
+              variant="outline-danger"
+              onClick={() => handleDeleteReview(rev._id)}
+              className="rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm border-0"
+              style={{
+                width: "38px",
+                height: "38px",
+                transition: "all 0.2s ease",
+              }}
+              title="Delete Review"
+            >
+              <i className="fas fa-trash-alt"></i>
+            </Button>
           )}
+        </div>
+
+        {/* Bottom Wave Decoration */}
+        <svg
+          className="position-absolute bottom-0 end-0 opacity-5"
+          width="80"
+          height="30"
+          viewBox="0 0 80 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 15 Q20 0, 40 15 T80 15"
+            stroke={index % 2 === 0 ? "#4facfe" : "#ff9a9e"}
+            strokeWidth="3"
+            fill="none"
+          />
+        </svg>
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="text-center py-5">
+    <i className="fas fa-comment-slash text-muted fs-1 mb-3 d-block"></i>
+    <p className="text-muted fs-5 fw-medium">No reviews yet. Be the first to share your experience!</p>
+    <div className="mt-3">
+      <i className="fas fa-star text-warning"></i>
+      <i className="fas fa-star text-warning"></i>
+      <i className="fas fa-star text-warning"></i>
+      <i className="fas fa-star text-warning"></i>
+      <i className="fas fa-star text-warning"></i>
+    </div>
+  </div>
+)}
         </div>
       </div>
 

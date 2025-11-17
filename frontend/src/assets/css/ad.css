@@ -208,3 +208,77 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(18px);
 }
+
+
+
+
+/* Orders table improvements */
+.orders-wrapper { padding: 8px; }
+.orders-table { width: 100%; border-collapse: collapse; }
+.order-row td, .order-row th {
+  vertical-align: middle;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+/* customer column */
+.td-customer .cust-name { font-weight: 600; }
+
+/* address truncation handled by JS title + CSS ellipsis for narrow cells */
+.td-address {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* item list in details */
+.item-list { list-style: none; padding-left: 0; margin: 6px 0 0 0; }
+.item-list li { font-size: 0.95rem; margin: 4px 0; }
+
+/* status badges */
+.status-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.badge-ordered { background: #6c757d; }   /* grey */
+.badge-packed  { background: #0d6efd; }   /* blue */
+.badge-shipped { background: #fd7e14; }   /* orange */
+.badge-delivered { background: #198754; } /* green */
+.badge-default { background: #343a40; }
+
+/* select under badge */
+.status-select { margin-top: 4px; }
+
+/* small screens: make each row a card-like stack */
+@media (max-width: 900px) {
+  .orders-table, .orders-table thead, .orders-table tbody, .orders-table th, .orders-table td, .orders-table tr {
+    display: block;
+  }
+  .orders-table thead { display: none; }
+  .order-row {
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: #fff;
+  }
+  .order-row td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border: none;
+  }
+  .order-row td::before { font-weight: 600; margin-right: 8px; }
+  /* optional: show label before value: but we have no JS to add labels, so leave simple */
+}
+
+/* loading text */
+.loading-text { text-align: center; padding: 30px; font-size: 1.05rem; }
+
+/* small touches */
+.actions-row { display: flex; justify-content: flex-end; gap: 8px; }

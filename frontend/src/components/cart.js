@@ -309,10 +309,20 @@ const Cart = () => {
                       +
                     </Button>
                   </div>
-
+{/* 
                   <Button variant="danger" size="sm" onClick={() => removeItem(item._id)}>
                     Remove
-                  </Button>
+                  </Button> */}
+                  <Button
+  variant="danger"
+  size="sm"
+  onClick={() => removeItem(item._id)}
+  className="rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm"
+  style={{ width: "36px", height: "36px" }}
+  title="Remove Item"
+>
+  <i className="fas fa-trash-alt"></i>
+</Button>
                 </Card.Body>
               </Card>
             ))}

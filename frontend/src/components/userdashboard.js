@@ -202,7 +202,7 @@ const UserOrders = () => {
                       {/* Header */}
                       <div className="order-header">
                         <div>
-                          <span className="badge-order-id">Order #{order._id.slice(-6)}</span>
+                          {/* <span className="badge-order-id">Order #{order._id.slice(-6)}</span> */}
                           <p className="mb-0 text-muted small">
                             <i className="fas fa-calendar-alt me-1"></i>
                             {formatDate(order.createdAt)}

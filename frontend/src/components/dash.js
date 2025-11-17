@@ -12,7 +12,7 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         // Fetch the customer count from the backend
-        axios.get(`${process.env.REACT_APP_API_URL}/count1`)
+        axios.get(`${process.env.REACT_APP_API_URL}/count`)
             .then(response => {
                 setCustomerCount(response.data.count); // Set the count from response
             })
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
             });
     }, []);
 
-    
+
 
     useEffect(() => {
         const fetchOrderCount = async () => {
@@ -121,16 +121,17 @@ const AdminDashboard = () => {
                         </Link>
                         <Link to="/admincustomers" className="dashboard-card" data-aos="zoom-in">
                             <h2>Users</h2>
-                            {/* <p className="count">{customerCount}</p> */}
+                            <p className="count">{customerCount}</p>
                             <i className="fas fa-users icon"></i>
                         </Link>
                         <Link to="/adminpending" className="dashboard-card" data-aos="zoom-in">
                             <h2>Pending Orders</h2>
+                            <p className="count">{orderCount}</p>
+
                             <i className="fas fa-truck icon"></i>
                         </Link>
                         <Link to="/adminorders" className="dashboard-card" data-aos="zoom-in">
                             <h2>Orders</h2>
-                            {/* <p className="count">{orderCount}</p> */}
                             <i className="fa-solid fa-pen-to-square icon"></i>
                         </Link>
                         <Link to="/addproducts" className="dashboard-card" data-aos="zoom-in">

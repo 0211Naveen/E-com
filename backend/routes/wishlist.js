@@ -35,16 +35,34 @@ router.get("/:userId", async (req, res) => {
 });
 
 // REMOVE FROM WISHLIST
+// router.delete("/:userId/:productId", async (req, res) => {
+//   try {
+//     await Wishlist.findOneAndDelete({
+//       userId: req.params.userId,
+//       productId: req.params.productId,
+//     });
+//     res.json({ message: "Removed" });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// REMOVE FROM WISHLIST
 router.delete("/:userId/:productId", async (req, res) => {
   try {
-    await Wishlist.findOneAndDelete({
+    const deleted = await Wishlist.findOneAndDelete({
       userId: req.params.userId,
       productId: req.params.productId,
     });
-    res.json({ message: "Removed" });
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Item not found in wishlist" });
+    }
+
+    res.json(deleted); // Return the deleted item
   } catch (err) {
+    console.error("Delete error:", err);
     res.status(500).json({ error: err.message });
   }
 });
-
 module.exports = router;
